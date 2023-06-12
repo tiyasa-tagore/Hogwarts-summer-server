@@ -38,8 +38,13 @@ async function run() {
         res.send(result);
       })
 
-     
+      //extra data
+    app.get('/extra', async (req, res) => {
+        const result = await extraCollection.find().toArray();
+        res.send(result);
+      })
 
+      
 
 
     // Send a ping to confirm a successful connection
