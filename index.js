@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
 
     const classesCollection = client.db("summerDb").collection("classes");
@@ -55,6 +55,13 @@ async function run() {
 
       app.get('/users', async (req, res) => {
         const result = await usersCollection.find().toArray();
+        res.send(result);
+      })
+
+      app.post('/carts', async (req, res) => {
+        const item = req.body;
+        console.log(item);
+        const result = await cartsCollection.insertOne(item);
         res.send(result);
       })
 
