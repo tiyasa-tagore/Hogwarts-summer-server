@@ -31,12 +31,55 @@ async function run() {
     const classesCollection = client.db("summerDb").collection("classes");
     const extraCollection = client.db("summerDb").collection("extra");
     const instructorsCollection = client.db("summerDb").collection("instructors");
+    const usersCollection = client.db("summerDb").collection("users");
+    const cartsCollection = client.db("summerDb").collection("carts");
+
+
+    //user
+    app.post('/users', async (req, res) => {
+        console.log('Received POST request at /users');
+  console.log('Request body:', req.body);
+
+        const user = req.body;
+         const query = { email: user.email }
+        const existingUser = await usersCollection.findOne(query);
+  
+        if (existingUser) {
+          return res.send({ message: 'user already exists' })
+        }
+  
+        const result = await usersCollection.insertOne(user);
+        console.log('User inserted:', result);
+        res.send(result);
+      });
+
+      app.get('/users', async (req, res) => {
+        const result = await usersCollection.find().toArray();
+        res.send(result);
+      })
 
     // get classes data
     app.get('/classes', async (req, res) => {
         const result = await classesCollection.find().toArray();
         res.send(result);
       })
+    // app.get('/classes/:id', async (req, res) => {
+    //     const result = await classesCollection.find().toArray();
+    //     res.send(result);
+    //   })
+
+    //   app.post('/classes', async (req, res) => {
+    //     const item = req.body;
+    //     const result = await classesCollection.insertOne(item);
+    //     res.send(result);
+    //   })
+
+    //   app.delete('/classes/:id', async (req, res) => {
+    //     const id = req.params.id;
+    //     const query = { _id: new ObjectId(id) };
+    //     const result = await classesCollection.deleteOne(query);
+    //     res.send(result);
+    //   })
 
       //extra data
     app.get('/extra', async (req, res) => {
